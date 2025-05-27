@@ -31,11 +31,11 @@ public class EmployeeService {
     @Autowired
     private EmailUtil emailUtil;
 
-    private final String photoPath = "C:\\Users\\EC21\\OneDrive - Mitrisk Consulting LLP\\Documents\\samruddhi\\photo\\";
+   // private final String photoPath = "C:\\Users\\EC21\\OneDrive - Mitrisk Consulting LLP\\Documents\\samruddhi\\photo\\";
 
 
     public Employee addEmployee(MultipartFile photos, EmployeeModel employeeModel) throws MessagingException {
-        String filePath = photoPath+photos.getOriginalFilename();
+      //  String filePath = photoPath+photos.getOriginalFilename();
 
         Employee employeeEntity = new Employee();
      //   List<Employee> employeeId = employeeRepo.findByEmployeeId(employeeModel.getEmployeeId());
@@ -48,18 +48,19 @@ public class EmployeeService {
             employeeEntity.setGender(employeeModel.getGender());
             employeeEntity.setMaritalStatus(employeeModel.getMaritalStatus());
             employeeEntity.setAddress(employeeModel.getAddress());
-            employeeEntity.setPhoto(filePath);
+           // employeeEntity.setPhoto(filePath);
             employeeEntity.setEmployeeId(employeeModel.getEmployeeId());
             employeeEntity.setJoiningDate(employeeModel.getJoiningDate());
-            employeeEntity.setDepartment(employeeModel.getDepartment());
+           // employeeEntity.setDepartment(employeeModel.getDepartment());
             employeeEntity.setPosition(employeeModel.getPosition());
             employeeEntity.setEmployeeType(employeeModel.getEmployeeType());
             employeeEntity.setReportingManager(employeeModel.getReportingManager());
             employeeEntity.setWorkLocation(employeeModel.getWorkLocation());
-            employeeEntity.setBankAccountNo(employeeModel.getBankAccountNo());
-            employeeEntity.setIfscCode(employeeModel.getIfscCode());
-            employeeEntity.setAadharNumber(employeeModel.getAadharNumber());
-            employeeEntity.setPan(employeeModel.getPan());
+            employeeEntity.setOfficialEmail(employeeModel.getOfficialEmail());
+//            employeeEntity.setBankAccountNo(employeeModel.getBankAccountNo());
+//            employeeEntity.setIfscCode(employeeModel.getIfscCode());
+//            employeeEntity.setAadharNumber(employeeModel.getAadharNumber());
+//            employeeEntity.setPan(employeeModel.getPan());
            // employeeEntity.setPassword(employeeModel.getPassword());
             employeeRepo.save(employeeEntity);
             emailUtil.welcomeMail(employeeModel.getEmail());

@@ -13,7 +13,6 @@ public class EmployeeModel {
     public String gender;
     public String maritalStatus;
     public String address;
-    public String photo;
     public int employeeId;
     public Date joiningDate;
     public String department;
@@ -21,11 +20,8 @@ public class EmployeeModel {
     public String employeeType;
     public String reportingManager;
     public String workLocation;
-    public String bankAccountNo;
-    public String ifscCode;
-    public String pan;
-    public String aadharNumber;
     public String password;
+    public String officialEmail;
 
 
 }
