@@ -2,6 +2,7 @@ package com.im.hrms.Controller;
 
 import com.im.hrms.Entity.AdminEntity;
 import com.im.hrms.Entity.Employee;
+import com.im.hrms.Entity.SuperAdmin;
 import com.im.hrms.Model.EmployeeModel;
 import com.im.hrms.Model.JwtRequest;
 import com.im.hrms.Model.JwtResponse;

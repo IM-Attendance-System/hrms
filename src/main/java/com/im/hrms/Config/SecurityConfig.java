@@ -36,7 +36,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/hrms/**").permitAll()
                         .requestMatchers("/hrms/login").permitAll()
-                        .requestMatchers("/hrms/addEmployee").permitAll()
+                        .requestMatchers("/admin/createAdmin").permitAll()
+                     //   .requestMatchers("/hrms/addEmployee").permitAll()
                        // .requestMatchers("auth/forgotPassword").permitAll()
                       //  .requestMatchers("/home/saveCorporate").permitAll()
                         .anyRequest().authenticated()

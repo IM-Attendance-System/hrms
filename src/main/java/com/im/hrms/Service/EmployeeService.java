@@ -2,9 +2,11 @@ package com.im.hrms.Service;
 
 import com.im.hrms.Entity.AdminEntity;
 import com.im.hrms.Entity.Employee;
+import com.im.hrms.Entity.SuperAdmin;
 import com.im.hrms.Model.EmployeeModel;
 import com.im.hrms.Repository.AdminRepo;
 import com.im.hrms.Repository.EmployeeRepo;
+import com.im.hrms.Repository.SuperAdminRepo;
 import com.im.hrms.Util.EmailUtil;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class EmployeeService {
 
     @Autowired
     public AdminRepo adminRepo;
+
+    @Autowired
+    public SuperAdminRepo superAdminRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -111,5 +116,17 @@ public class EmployeeService {
 
     public List<AdminEntity> adminUser() {
         return adminRepo.findAll();
+    }
+
+    public SuperAdmin createSuperAdmin(String emailId, String password) {
+
+        SuperAdmin superAdmin = new SuperAdmin();
+        superAdmin.setSuperAdminEmailId(emailId);
+        superAdmin.setPassword(password);
+        return superAdminRepo.save(superAdmin);
+    }
+
+    public List<SuperAdmin> superAdminUser() {
+        return superAdminRepo.findAll();
     }
 }
