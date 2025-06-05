@@ -11,6 +11,7 @@ import com.im.hrms.Util.EmailUtil;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.query.JSqlParserUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +40,7 @@ public class EmployeeService {
    // private final String photoPath = "C:\\Users\\EC21\\OneDrive - Mitrisk Consulting LLP\\Documents\\samruddhi\\photo\\";
 
 
-    public Employee addEmployee(MultipartFile photos, EmployeeModel employeeModel) throws MessagingException {
+    public Employee addEmployee(EmployeeModel employeeModel) throws MessagingException {
       //  String filePath = photoPath+photos.getOriginalFilename();
 
         Employee employeeEntity = new Employee();
@@ -128,5 +129,41 @@ public class EmployeeService {
 
     public List<SuperAdmin> superAdminUser() {
         return superAdminRepo.findAll();
+    }
+
+    public String resetPassword(String emailId, String newPassword, String confirmPassword) throws MessagingException {
+
+        Employee employee = employeeRepo.findByEmail(emailId)
+                .orElseThrow(() -> new RuntimeException("User not found with this email: " + emailId));
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        // Old password matches, update with new hashed password
+        String newHashedPassword = passwordEncoder.encode(newPassword);
+        // String confirmHashedPassword = passwordEncoder.encode(confirmPassword);
+        if (newPassword.equals(confirmPassword)) {
+            employee.setPassword(newHashedPassword);
+            employee.setLoginCount("1");
+            employeeRepo.save(employee);
+            emailUtil.sendPasswordResetEmail(emailId);
+            return "New password set successfully";
+        } else {
+            throw new RuntimeException("new password and confirm password both are not same!!");
+        }
+    }
+
+    public String forgotPassword(String email) {
+
+        employeeRepo.findByEmail(email).
+                orElseThrow(() -> new RuntimeException("user not found with this email" + email));
+        try {
+
+            emailUtil.sendPasswordEmail(email);
+        } catch (MessagingException e) {
+            throw new RuntimeException("unable to set password try again!");
+        }
+        return "please check your mail to reset password";
+
+
     }
 }

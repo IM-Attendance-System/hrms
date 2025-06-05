@@ -18,7 +18,7 @@ public class LeaveController {
     public LeaveService leaveService;
 
     @PostMapping("/leaveRequest")
-    public LeaveEntity leaveRequest(@ModelAttribute LeaveModel leaveModel) {
+    public LeaveEntity leaveRequest(@RequestBody LeaveModel leaveModel) {
 
         return this.leaveService.leaveRequest(leaveModel);
     }

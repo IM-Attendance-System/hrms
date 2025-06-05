@@ -137,9 +137,9 @@ public class EmployeeController {
 
     @PostMapping("/addEmployee")
     public ResponseEntity<Employee> addEmployee(
-            @RequestParam("photos") MultipartFile photos,
-            @ModelAttribute EmployeeModel employeeModel) throws MessagingException {
-        Employee employee = employeeService.addEmployee(photos,employeeModel);
+
+            @RequestBody EmployeeModel employeeModel) throws MessagingException {
+        Employee employee = employeeService.addEmployee(employeeModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(employee);
     }
 
@@ -147,6 +147,16 @@ public class EmployeeController {
     public List<Employee> getEmployee(@RequestParam Long employeeId) {
 
         return this.employeeService.getEmployee(employeeId);
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword( @RequestParam String emailId,@RequestParam String newPassword, @RequestParam String confirmPassword) throws MessagingException {
+        return new ResponseEntity<>(employeeService.resetPassword(emailId,newPassword,confirmPassword), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<String> forgotPassword(@RequestBody JwtRequest request) {
+        return new ResponseEntity<>(employeeService.forgotPassword(request.getEmail()), HttpStatus.OK);
     }
 
 

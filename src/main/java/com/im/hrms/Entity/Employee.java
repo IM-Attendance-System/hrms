@@ -71,6 +71,9 @@ public class Employee implements UserDetails {
     @Column(name = "Work_Location")
     public String workLocation;
 
+    @Column(name="Login_Count")
+    private String loginCount;
+
 //    @Column(name = "Bank_Account_No")
 //    public String bankAccountNo;
 //

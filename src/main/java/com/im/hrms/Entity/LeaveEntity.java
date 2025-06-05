@@ -3,6 +3,7 @@ package com.im.hrms.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -19,16 +20,19 @@ public class LeaveEntity {
     public String leaveType;
 
     @Column(name="From_Date")
-    public Date fromDate;
+    public LocalDate fromDate;
 
     @Column(name="To_Date")
-    public Date toDate;
+    public LocalDate toDate;
 
     @Column(name="Reason")
     public String reason;
 
     @Column(name="Status")
     public String status;
+
+    @Column(name="Leave_Duration")
+    public String leaveDuration;
 
     public LeaveEntity() {
     }

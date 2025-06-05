@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
@@ -65,6 +66,58 @@ public class EmailUtil {
 
         javaMailSender.send(mimeMessage);
     }
+
+    public void sendPasswordResetEmail(String emailId) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        Employee employee = employeeRepo.findByEmail(emailId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String fullName = employee.getFullName();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(emailId);
+        mimeMessageHelper.setSubject("Password Reset Successfully!!");
+
+        String emailBody = String.format("Hi %s,<br><br>", fullName);
+        emailBody += "New password set successfully:<br>";
+        //  emailBody += String.format("<a href=\"http://localhost:8097/setPassword?emailid=%s\" target=\"http://localhost:4200/resetpassword\">Click here to set your password</a>", emailId);
+        mimeMessageHelper.setText(emailBody, true);
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendPasswordEmail(String emailId) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        Employee employee = employeeRepo.findByEmail(emailId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String resetToken = generateResetToken(emailId);
+
+        String fullName = employee.getFullName();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(emailId);
+        mimeMessageHelper.setSubject("set password");
+
+        String emailBody = String.format("Hi %s,<br><br>", fullName);
+        emailBody += "Please click the link below to set your password:<br>";
+        emailBody += String.format("<a href=\"http://localhost:8097/auth/setPassword?emailId=%s&token=%s\" target=\"http://localhost:4200/resetpassword\">Click here to set your password</a>", emailId,resetToken);
+        mimeMessageHelper.setText(emailBody, true);
+        javaMailSender.send(mimeMessage);
+    }
+
+    private String generateResetToken(String email) {
+        // Check if the user with the provided email exists
+        employeeRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with this email: " + email));
+
+        // Load user details
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        // Generate a token
+        String token = helper.generateToken(userDetails);
+
+        return token;
+    }
+
+
 
 
 }
